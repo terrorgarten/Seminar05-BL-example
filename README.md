@@ -169,7 +169,7 @@ Okay, we have successfully created services that make our controllers look clean
     - FollowerId
     - UserSummaryDTO (nullable)
     - WasSuccessful (bool)
-4. Add the following method to the `IFollowService`
+4. Add the following method to the `IFollowFacade`
     - `public Task<List<FollowInfoDTO>> FollowUsersAsync(int followerId, params int[] userIds);`
 5. Let's implement the method:
     1. We need to split the users to 2 groups. "Followers" and "Non-Followers". We can achieve this by using `IFollowService` and `IUserService`
