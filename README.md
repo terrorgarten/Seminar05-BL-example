@@ -15,7 +15,7 @@ git clone https://gitlab.fi.muni.cz/pv179/seminar-05
 
 ## TASK 2 - Examine the solution
 
-Go through the already written code. It is recommended to check side by side `UserController` and `UserSolutionController`. What you can see there is 2 aproaches to retrieving data. First is using a service that does the "magic" on the background. However the other one might seem more straight forward, however you can already see how confusing and heaviky dependent it is on the database model. If we split the `User` into 2 tables,  we would need to change multiple endpoints. Additionally, you can see that there is a new csproj called `Business Layer`. In there, you can see DTOs, DTO mappers and Services. 
+Go through the already written code. It is recommended to check side by side `UserController` and `UserSolutionController`. What you can see there is 2 aproaches to retrieving data. First is using a service that does the "magic" on the background. However the other one might seem more straight forward, however you can already see how confusing and heavily dependent it is on the database model. If we split the `User` into 2 tables,  we would need to change multiple endpoints. Additionally, you can see that there is a new csproj called `Business Layer`. In there, you can see DTOs, DTO mappers and Services. 
 
 1. Create a `UserDTO` (this will be our detailed user DTO)
     - Example:
@@ -139,7 +139,7 @@ It is completelly up to you, if you refactor the `FollowController` to `FollowSe
 
 ## TASK 5 - The Controller
 
-After creating the service, it is time to create the controller. Since we would like to show you a "side-by-side" different of the controller (before and after), it is rcommended to create a new controller called `FollowSolutionController`.
+After creating the service, it is time to create the controller. Since we would like to show you a "side-by-side" different of the controller (before and after), it is recommended to create a new controller called `FollowSolutionController`.
 
 1. Create the Controller and use DI to inject `IUserService` and `IFollowService` using Constructor Injection.
 
@@ -161,7 +161,7 @@ After creating the service, it is time to create the controller. Since we would 
 
 ## TASK 6 - New Pattern - Facade
 
-Okay, we have successfully created services that make our controllers look clean again. Now, the next task will be to follow multiple users in 1 endpoint. However, you need to think about large requests that will be requesting thousands, or maybe ten thousands of follows per call. Lets see why Facade will help us out :).
+Okay, we have successfully created services that make our controllers look clean again. Now, the next task will be to follow multiple users in 1 endpoint. However, you need to think about large requests that will be requesting thousands, or maybe ten thousands of follows per call. Let's see why Facade will help us out :).
 
 1. Create a `BusinessLayer/Facades/FollowFacade` and `IFollowFacade`
 2. Inject using a constructor `IFollowService` and `IUserService`
@@ -171,7 +171,7 @@ Okay, we have successfully created services that make our controllers look clean
     - WasSuccessful (bool)
 4. Add the following method to the `IFollowService`
     - `public Task<List<FollowInfoDTO>> FollowUsersAsync(int followerId, params int[] userIds);`
-5. Lets implement the method:
+5. Let's implement the method:
     1. We need to split the users to 2 groups. "Followers" and "Non-Followers". We can achieve this by using `IFollowService` and `IUserService`
         ```cs
         var followerIds = await _followService.GetFollowerIdsAsync(followeeId);
@@ -213,7 +213,7 @@ Okay, we have successfully created services that make our controllers look clean
             };
         }
         ```
-    3. Next, lets get the information about the unsuccessful users:
+    3. Next, let's get the information about the unsuccessful users:
         ```cs
         private async Task<List<FollowInfoDTO>> GetFailedFollowersAsync(List<int> failedUserFollowIds)
         {
@@ -264,4 +264,4 @@ Okay, we have successfully created services that make our controllers look clean
 
 ## [Bonus] TASK 8 - Think about it ;)
 
-There is one call in `FollowFacade` that can be omitted. Can you find it ?
+There is one call in `FollowFacade` that can be omitted. Can you find it?
