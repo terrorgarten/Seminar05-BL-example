@@ -174,19 +174,19 @@ Okay, we have successfully created services that make our controllers look clean
 5. Let's implement the method:
     1. We need to split the users to 2 groups. "Followers" and "Non-Followers". We can achieve this by using `IFollowService` and `IUserService`
         ```cs
-        var followerIds = await _followService.GetFollowerIdsAsync(followeeId);
+        var followerIds = await _followService.GetFollowerIdsAsync(followerId);
         var nonFollowedUserIds = userIds.Except(followerIds).ToArray();
         var users = await _userService.GetUsersAsync(nonFollowedUserIds);
         ```
     2. Now we will create a helper method that will be used to split the users into "successful" and "unsuccessful" follows.
         ```cs
-        private async Task<List<FollowInfoDTO>> FollowNonFollowedUsersAsync(int followeeId, List<UserSummaryDTO> users, List<int> failedUserFollowIds)
+        private async Task<List<FollowInfoDTO>> FollowNonFollowedUsersAsync(int followerId, List<UserSummaryDTO> users, List<int> failedUserFollowIds)
         {
             var followedUsers = new List<FollowInfoDTO>();
 
             foreach (var user in users)
             {
-                var followerId = user.UserId;
+                var followeeId = user.UserId;
 
                 if (!await _followService.FollowUserAsync(followerId, followeeId, checkIfExists: false, save: false))
                 {
