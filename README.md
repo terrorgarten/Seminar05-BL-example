@@ -1,4 +1,4 @@
-# Seminar 5 - Business Layer, Facades, DTOs, Services & Controller Refactoring
+# Seminar 5 - Business Layer, Facades, DTOs, Services
 
 In this seminar, we will go through the Business Layer, where you will be able to see & create services, facades and DTO. You say that this is an introduction to business layer.
 
