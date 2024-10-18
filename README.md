@@ -93,7 +93,7 @@ It is completelly up to you, if you refactor the `FollowController` to `FollowSe
     ```cs
     public interface IFollowService : IBaseService
     {
-        public Task<List<int>> GetFollowerIdsAsync(int followeeId);
+        public Task<List<int>> GetFollowerIdsAsync(int followerId);
 
         public Task<bool> DoesFollowUser(int followerId, int followeeId);
 
@@ -170,12 +170,12 @@ Okay, we have successfully created services that make our controllers look clean
     - UserSummaryDTO (nullable)
     - WasSuccessful (bool)
 4. Add the following method to the `IFollowFacade`
-    - `public Task<List<FollowInfoDTO>> FollowUsersAsync(int followerId, params int[] userIds);`
+    - `public Task<List<FollowInfoDTO>> FollowUsersAsync(int followerId, params int[] toFollowUserIds);`
 5. Let's implement the method:
-    1. We need to split the users to 2 groups. "Followers" and "Non-Followers". We can achieve this by using `IFollowService` and `IUserService`
+    1. We need to split the users to 2 groups. "Followed" and "Non-Followed". We can achieve this by using `IFollowService` and `IUserService`
         ```cs
         var followerIds = await _followService.GetFollowerIdsAsync(followerId);
-        var nonFollowedUserIds = userIds.Except(followerIds).ToArray();
+        var nonFollowedUserIds = toFollowUserIds.Except(followerIds).ToArray();
         var users = await _userService.GetUsersAsync(nonFollowedUserIds);
         ```
     2. Now we will create a helper method that will be used to split the users into "successful" and "unsuccessful" follows.
@@ -224,17 +224,17 @@ Okay, we have successfully created services that make our controllers look clean
         ```
     4. Now, if you look closer to the first lines of `FollowFacade::FollowUsersAsync` method, you can see that we have retrieved all of the Users, however we are not considering an IDs that no longer exists / never existed. For that, we need to extract these "non-existing" and "existing" ids from request ids.
         ```cs
-        private static List<int> ExtractSuccessfulFollows(int[] userIds, List<UserSummaryDTO> users, List<int> failedUserFollowIds)
+        private static List<int> ExtractSuccessfulFollows(int[] toFollowUserIds, List<UserSummaryDTO> users, List<int> failedUserFollowIds)
         {
-            return userIds
+            return toFollowUserIds
                 .Where(a => users.Select(a => a.UserId).Contains(a))
                 .Except(failedUserFollowIds)
                 .ToList();
         }
 
-        private List<FollowInfoDTO> GetNonExistingOrFollowedUsers(IEnumerable<int> followedIds, List<int> failedUserFollowIds, int[] userIds)
+        private List<FollowInfoDTO> GetNonExistingOrFollowedUsers(IEnumerable<int> followedIds, List<int> failedUserFollowIds, int[] toFollowUserIds)
         {
-            var nonExistingOrFollowedUsers = userIds
+            var nonExistingOrFollowedUsers = toFollowUserIds
                 .Except(followedIds)
                 .Except(failedUserFollowIds)
                 .Select(a => ToFollowInfoDTO(a, null, false))
