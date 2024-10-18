@@ -14,7 +14,7 @@ namespace WebAPI.Controllers
             _dBContext = dBContext;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("[controller]/user/follow")]
         public async Task<IActionResult> CreateFollow(int userId, int userToFollow)
         {
@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("[controller]/user/follow/ids")]
         public async Task<IActionResult> CreateFollowIds(int userId, int userToFollow)
         {
@@ -89,7 +89,7 @@ namespace WebAPI.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpDelete]
         [Route("[controller]/user/unfollow")]
         public async Task<IActionResult> DeleteFollow(int userId, int userToUnfollowId)
         {

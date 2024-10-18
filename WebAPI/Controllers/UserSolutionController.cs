@@ -36,7 +36,7 @@ namespace WebAPI.Controllers
             return Ok(user);
         }
 
-        [HttpGet]
+        [HttpDelete]
         [Route("[controller]/delete")]
         public async Task<IActionResult> Delete(int userId)
         {
