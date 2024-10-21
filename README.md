@@ -93,12 +93,16 @@ It is completelly up to you, if you refactor the `FollowController` to `FollowSe
     ```cs
     public interface IFollowService : IBaseService
     {
+        /* Gets a list of the IDs of all users following the given user */
         public Task<List<int>> GetFollowerIdsAsync(int followerId);
 
+        /* Checks if the follower follows the followee */
         public Task<bool> DoesFollowUser(int followerId, int followeeId);
 
+        /* Follows the followee */
         public Task<bool> FollowUserAsync(int followerId, int followeeId, bool checkIfExists = true, bool save = true);
 
+        /* Unfollows the followee */
         public Task<bool> UnFollowUserAsync(int followerId, int followeeId, bool checkIfExists = true, bool save = true);
     }
     ```
